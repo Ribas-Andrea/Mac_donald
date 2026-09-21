@@ -1,13 +1,18 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Carte } from './components/carte/carte';
+import { Recherche } from './components/recherche/recherche';
 
 @Component({
-  imports: [RouterOutlet, Carte],
+  imports: [RouterOutlet, Recherche],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
 export class App {
+
+  villeRecue = '';
+
   protected readonly title = signal('mac_donald_frontend_angular');
+
+
 }

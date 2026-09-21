@@ -1,6 +1,10 @@
-<div style="height: 300px;"
+     <h1>McDonald's de {{ ville }}</h1>
+
+<div id="map"
      leaflet 
      [leafletOptions]="options"
-     [leafletLayersControl]="layersControl"
-     [leafletLayers]="layers">
+     [leafletLayers]="layers"
+     (leafletMapReady)="onMapReady($event)">
+
+
 </div>

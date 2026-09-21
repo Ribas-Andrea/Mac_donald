@@ -1,3 +1,9 @@
-<app-carte></app-carte>
+<div id="tailleEcran">
 
-<router-outlet />
+  <app-recherche (villeRecherchee)="villeRecue = $event"> </app-recherche>
+  <!-- <p>Ville reçue : {{ villeRecue }}</p> -->
+
+  <router-outlet />
+  
+</div>
+
