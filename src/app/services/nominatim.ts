@@ -6,7 +6,7 @@ export class Nominatim {
   private http = inject(HttpClient);
 
   rechercherVille(ville: string) {
-    const url = `https://nominatim.openstreetmap.org/search?q=${ville}&format=json`;
+    const url = `https://nominatim.openstreetmap.org/search?q=${ville}&format=json&addressdetails=1`;
 
     return this.http.get<any[]>(url, {
       headers: {

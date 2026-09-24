@@ -1,1 +1,10 @@
-/* You can add global styles to this file, and also import other style files */
+#choisirRestaurant {
+    background-color: #F0C900;
+    border-radius: 16px;
+    width: 60px;
+    padding: 8px 16px;
+    display: flex;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+}

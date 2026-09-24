@@ -65,16 +65,18 @@ export class Carte {
             ${quartier} <br>
             ${ville} <br>
             ${adresse.postcode} <br> <br>
-            <button id="selectionner">Sélectionner</button>
+            <button id="choisirRestaurant">Choisir</button>
           `);
 
           marqueur.on('popupopen', () => {
-            const bouton = document.getElementById('selectionner');
+            const bouton = document.getElementById('choisirRestaurant');
 
             bouton?.addEventListener('click', () => {
               // console.log('Restaurant sélectionné :', restaurant);
+              console.log(this.restaurantSelectionne.emit);
               this.restaurantSelectionne.emit(restaurant);
             });
+            //faire des console.log pour voir a quel endroit on s'arrête
           });
 
         // bindPopup("Mcdo : " + maVariable)

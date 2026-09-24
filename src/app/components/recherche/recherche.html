@@ -1,41 +1,60 @@
 <div>
+
+<form [formGroup]="form" (ngSubmit)="chercherVilles()">
+  <label for="recherche-villes">Rechercher une ville : </label>
+  <br>
+  <div class="champ-recherche">
+      <input id="recherche-villes" type="text" formControlName="villeSelectionnee" autocomplete="off" placeholder="Rechercher une ville"/>
+      <button type="submit" style="background: none; border: none; padding: 0;">
+        <img 
+          src="logo_rechercher.png" 
+          alt="Logo Rechercher" 
+          style="cursor: pointer; width:24px"> 
+      </button>
+      @if(_getVilleSelectionnee.invalid && isSubmited()){
+        <small>Veuillez saisir une ville avant de lancer la recherche</small>
+      } @else {
+        @if (propositionsVilles.length > 0) {
+        <div class="liste-suggestions">
+          @for (proposition of propositionsVilles; track proposition.place_id){
+            <div class="suggestion" (click)="selectionnerVille(proposition)">
+              {{libellePropositionsVilles(proposition)}}
+            </div>
+          }
+        </div>
+        }
+      }
+      
+  </div>
+ </form>
+
+
+
+
 <app-carte 
   [latitude]="latitude()"
   [longitude]="longitude()"
-  [ville]="villeSelectionnee"
+  [ville]="_getVilleSelectionnee.value"
   [restaurantLatitude]="restaurantLatitude()"
   [restaurantLongitude]="restaurantLongitude()"
   [restaurants]="restaurants()"
   (restaurantSelectionne)="selectionnerRestaurant($event)">
-  </app-carte>
-
-
-<!-- <button (click)="villeRecherchee.emit('Lyon')">
-  Rechercher Lyon
-</button> -->
+</app-carte>
 
 
 
-<input
-  type="text"
-  [(ngModel)]="villeSelectionnee"
-  placeholder="Rechercher une ville"
->
 
-<button (click)="chercher()">
-  Rechercher
-</button>
 
-@if (restaurantSelectionne) {
+@if (restaurantSelectionne()) {
   <div>
     <h2>Restaurant sélectionné</h2>
 
-    <p>{{ restaurantSelectionne.name }}</p>
-    <p>{{ restaurantSelectionne.display_name }}</p>
+    <p>{{ restaurantSelectionne().name }}</p>
+    <p>{{ restaurantSelectionne().display_name }}</p>
   </div>
+} @else {
+  <p>Aucun restaurant séléctionné</p>
 }
 
 </div>
-
-
 
