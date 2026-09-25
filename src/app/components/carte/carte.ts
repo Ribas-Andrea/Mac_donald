@@ -14,7 +14,7 @@ import { latLng, Map, marker, tileLayer } from 'leaflet';
 export class Carte {
 
   @Input() ville = '';
-  @Output() restaurantSelectionne = new EventEmitter<any>();
+  @Output() restaurantSelectionne = new EventEmitter<string>();
   private map?: Map;
 
   // Position de Saintes :
@@ -44,6 +44,16 @@ export class Carte {
       //   this.marker.push(et ici on met les données gps, le marqueur, etc..)
       // });
 
+      // Supprime les anciens marqueurs de la carte
+        this.marqueurs.forEach((marqueur) => {
+          marqueur.remove();
+        });
+
+        // Vide le tableau des marqueurs
+        this.marqueurs.length = 0;
+
+
+
       restaurants.forEach((restaurant) => {
         // console.log('Restaurant :', restaurant);
         const adresse = restaurant.address;
@@ -68,13 +78,16 @@ export class Carte {
             <button id="choisirRestaurant">Choisir</button>
           `);
 
-          marqueur.on('popupopen', () => {
-            const bouton = document.getElementById('choisirRestaurant');
+          marqueur.on('popupopen', (e) => {
+            console.log('POPUP OUVERTE :', e.popup.getElement()?.textContent);
+            // const bouton = document.getElementById('choisirRestaurant');
+            const bouton = e.popup.getElement()?.querySelector('#choisirRestaurant');
 
             bouton?.addEventListener('click', () => {
               // console.log('Restaurant sélectionné :', restaurant);
+              console.log('Clic sur :', e.popup.getElement()?.textContent);
               console.log(this.restaurantSelectionne.emit);
-              this.restaurantSelectionne.emit(restaurant);
+              this.restaurantSelectionne.emit(e.popup.getElement()?.textContent);
             });
             //faire des console.log pour voir a quel endroit on s'arrête
           });

@@ -93,7 +93,7 @@ export class Recherche {
     )
     .subscribe((resultat) => {
       this.propositionsVilles.set(resultat);
-      console.log(this.propositionsVilles());
+      // console.log(this.propositionsVilles());
     });
   }
 
@@ -115,6 +115,9 @@ export class Recherche {
         this.latitude.set(Number(resultat[0].lat));
         this.longitude.set(Number(resultat[0].lon));
         this.propositionsVilles.set([]);
+
+      // On efface le restaurant précédemment sélectionné
+      this.restaurantSelectionne.set(null);
 
         // Les nouvelles coordonnées sont en place, on cherche les restaurants
         this.chercherRestaurants();
@@ -142,7 +145,7 @@ export class Recherche {
   };
 
   selectionnerVille(ville: ResultatNominatim) {
-    console.log("test");
+    // console.log("test");
     this._getVilleSelectionnee.setValue(ville.display_name, { emitEvent: false });
 
     this.propositionsVilles.set([]);
@@ -174,7 +177,9 @@ export class Recherche {
 
 
   selectionnerRestaurant(restaurant: any) {
+    // console.log('1 - $event reçu :', restaurant);
     this.restaurantSelectionne.set(restaurant);
-    console.log('Restaurant sélectionné :', restaurant);
+    // console.log('Restaurant sélectionné :', restaurant);
+    // console.log('2 - signal :', this.restaurantSelectionne());
   }
 }
