@@ -46,16 +46,18 @@ export class Recherche {
     return this.form.controls.villeSelectionnee;
   };
 
-  propositionsVilles: ResultatNominatim[] = [];
+  propositionsVilles = signal<ResultatNominatim[]>([]);
 
   libellePropositionsVilles(ville: ResultatNominatim): string {
     const adresse = ville.address;
 
+    // const name = adresse.name || '';
     const nom = adresse.city || adresse.town || adresse.village || adresse.municipality || '';
     const codePostale = adresse.postcode ? ', ' + adresse.postcode: '';
     const pays = adresse.country ? ', ' + adresse.country: '';
 
     return nom + codePostale + pays;
+    // return name;
   }
   
 
@@ -90,8 +92,8 @@ export class Recherche {
       )
     )
     .subscribe((resultat) => {
-      this.propositionsVilles = resultat;
-      console.log(this.propositionsVilles);
+      this.propositionsVilles.set(resultat);
+      console.log(this.propositionsVilles());
     });
   }
 
@@ -112,7 +114,7 @@ export class Recherche {
       
         this.latitude.set(Number(resultat[0].lat));
         this.longitude.set(Number(resultat[0].lon));
-        this.propositionsVilles = [];
+        this.propositionsVilles.set([]);
 
         // Les nouvelles coordonnées sont en place, on cherche les restaurants
         this.chercherRestaurants();
@@ -127,14 +129,14 @@ export class Recherche {
   autocompletionVille() {
 
   if (this._getVilleSelectionnee.value.length < 2) {
-    this.propositionsVilles = [];
+    this.propositionsVilles.set([]);
     return;
   }
 
   this.nominatim
     .rechercherVille(this._getVilleSelectionnee.value)
     .subscribe((resultat: ResultatNominatim[]) => {
-        this.propositionsVilles = resultat;
+        this.propositionsVilles.set(resultat);
       }
     );
   };
@@ -143,7 +145,7 @@ export class Recherche {
     console.log("test");
     this._getVilleSelectionnee.setValue(ville.display_name, { emitEvent: false });
 
-    this.propositionsVilles = [];
+    this.propositionsVilles.set([]);
   }
 
 

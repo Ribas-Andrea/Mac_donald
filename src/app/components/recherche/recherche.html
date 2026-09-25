@@ -14,9 +14,9 @@
       @if(_getVilleSelectionnee.invalid && isSubmited()){
         <small>Veuillez saisir une ville avant de lancer la recherche</small>
       } @else {
-        @if (propositionsVilles.length > 0) {
+        @if (propositionsVilles().length > 0) {
         <div class="liste-suggestions">
-          @for (proposition of propositionsVilles; track proposition.place_id){
+          @for (proposition of propositionsVilles(); track proposition.place_id){
             <div class="suggestion" (click)="selectionnerVille(proposition)">
               {{libellePropositionsVilles(proposition)}}
             </div>
