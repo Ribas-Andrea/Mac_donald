@@ -1,0 +1,24 @@
+
+
+  <app-carte 
+    [ville]="villeRecue" 
+    [latitude]="latitude" 
+    [longitude]="longitude"
+    [restaurants]="restaurants" 
+    (restaurantSelectionne)="restaurantSelectionne = $event" >
+  </app-carte>
+
+  <app-rechercheVilles 
+    (villeRecherchee)="villeRecue = $event.ville; 
+    latitude = $event.latitude; 
+    longitude = $event.longitude">
+  </app-rechercheVilles>
+
+  <app-rechercheRestaurants 
+    [ville]="villeRecue" 
+    [latitude]="latitude" 
+    [longitude]="longitude" 
+    [restaurantSelectionneRecu]="restaurantSelectionne" 
+    (restaurantsTrouves)="restaurants = $event">
+  </app-rechercheRestaurants>
+  

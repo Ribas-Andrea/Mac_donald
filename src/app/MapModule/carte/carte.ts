@@ -70,24 +70,26 @@ export class Carte {
           restaurant.lat,
           restaurant.lon
         ]).bindPopup(`
-            <strong>${restaurant.name}</strong><br>
-            ${rue} <br>
-            ${quartier} <br>
-            ${ville} <br>
-            ${adresse.postcode} <br> <br>
+            <div id="popupContent">
+              <strong>${restaurant.name}</strong><br>
+              ${rue} <br>
+              ${quartier} <br>
+              ${ville} <br>
+              ${adresse.postcode} <br> <br>
+            </div>
             <button id="choisirRestaurant">Choisir</button>
           `);
 
           marqueur.on('popupopen', (e) => {
-            console.log('POPUP OUVERTE :', e.popup.getElement()?.textContent);
-            // const bouton = document.getElementById('choisirRestaurant');
+            // console.log('POPUP OUVERTE :', e.popup.getElement()?.textContent);
             const bouton = e.popup.getElement()?.querySelector('#choisirRestaurant');
 
             bouton?.addEventListener('click', () => {
               // console.log('Restaurant sélectionné :', restaurant);
-              console.log('Clic sur :', e.popup.getElement()?.textContent);
-              console.log(this.restaurantSelectionne.emit);
-              this.restaurantSelectionne.emit(e.popup.getElement()?.textContent);
+              // console.log('Clic sur :', e.popup.getElement()?.textContent);
+              // console.log(this.restaurantSelectionne.emit);
+              this.restaurantSelectionne.emit(e.popup.getElement()?.querySelector('#popupContent')?.textContent); // On fait le textContent que si popupContent existe
+              // this.restaurantSelectionne.emit(e.popup.getElement()?.textContent); 
             });
             //faire des console.log pour voir a quel endroit on s'arrête
           });
@@ -142,17 +144,9 @@ export class Carte {
     zoom: 5, // Il s'agit du zoom par défault de la carte globale
     center: latLng(45.750000, -0.633330) // on précise sur quel longitude et latitude par défault on veut être (Saintes), pour trouver les coordonnées, taper coordonnées gps + la ville dans google
   };
-  
-    // marqueur = marker([
-    //   this.latitude(),
-    //   this.longitude()
-    // ]).bindPopup('Test');
 
     marqueurs: any[] = [];
 
     layers = this.marqueurs;
-
-    
-
 
 }

@@ -29,31 +29,3 @@
  </form>
 
 
-
-
-<app-carte 
-  [latitude]="latitude()"
-  [longitude]="longitude()"
-  [ville]="_getVilleSelectionnee.value"
-  [restaurantLatitude]="restaurantLatitude()"
-  [restaurantLongitude]="restaurantLongitude()"
-  [restaurants]="restaurants()"
-  (restaurantSelectionne)="selectionnerRestaurant($event)">
-</app-carte>
-
-
-
-
-
-@if (restaurantSelectionne()) {
-  <div>
-    <h2>Restaurant sélectionné</h2>
-
-    <p>{{ restaurantSelectionne()}}</p>
-  </div>
-} @else {
-  <p>Aucun restaurant séléctionné</p>
-}
-
-</div>
-
