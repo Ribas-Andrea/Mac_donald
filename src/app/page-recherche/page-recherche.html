@@ -8,17 +8,20 @@
     (restaurantSelectionne)="restaurantSelectionne = $event" >
   </app-carte>
 
-  <app-rechercheVilles 
+
+
+  <app-rechercheVilles id="overlayVilles"
     (villeRecherchee)="villeRecue = $event.ville; 
     latitude = $event.latitude; 
     longitude = $event.longitude">
   </app-rechercheVilles>
 
-  <app-rechercheRestaurants 
+  <app-rechercheRestaurants id="overlayRestaurants"
     [ville]="villeRecue" 
     [latitude]="latitude" 
     [longitude]="longitude" 
     [restaurantSelectionneRecu]="restaurantSelectionne" 
     (restaurantsTrouves)="restaurants = $event">
   </app-rechercheRestaurants>
-  
+
+

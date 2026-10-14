@@ -1,10 +1,9 @@
 .champ-recherche {
-  position: relative;
-  display: inline-block;
+  display: flex;
+  gap: 2%;
 }
 
 .champ-recherche input {
-  width: 300px;
   box-sizing: border-box;
 }
 
@@ -12,13 +11,10 @@
   position: absolute;
   top: 100%;
   left: 0;
-
   width: 300px;
-
   background: white;
   border: 1px solid #ccc;
   border-top: none;
-
   z-index: 1000;
 }
 

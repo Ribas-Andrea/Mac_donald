@@ -1,0 +1,29 @@
+#overlay{
+  display: flex;
+  flex-direction: column;
+}
+
+
+#overlayVilles{
+  background-color: rgb(255, 255, 255, 0.75);
+  border-radius: 8px;
+  position: absolute;
+  top: 2%;
+  left: 18%;
+  width: 75%;
+  z-index: 1000;
+  padding-left: 4%;
+  padding-bottom: 2%;
+}
+
+#overlayRestaurants{
+  background-color: rgb(255, 255, 255, 0.75);
+  opacity: 75%;
+  border-radius: 8px 8px 0 0 ;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  padding-left: 4%;
+}
