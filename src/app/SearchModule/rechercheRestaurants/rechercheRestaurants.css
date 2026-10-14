@@ -36,3 +36,16 @@ small{
   font-size: small;
   color: red;
 }
+
+#btnChoixRestaurant{
+  background-color: #F0C900;
+  border-radius: 8px;
+  width: 30%;
+  padding: 8px 16px;
+  display: flex;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
