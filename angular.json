@@ -22,13 +22,7 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public",
-                "output": "/"
-              },
-              {
-                "glob": "**/*",
-                "input": "node_modules/leaflet/dist/images",
-                "output": "/media/"
+                "input": "public"
               }
             ],
             "styles": [

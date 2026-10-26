@@ -1,34 +1,31 @@
 <div>
 
-  <form [formGroup]="form" (ngSubmit)="chercherVilles()">
-    <label for="recherche-villes">Rechercher une ville : </label>
-    <br>
-    <div class="champ-recherche">
-        <input id="recherche-villes" type="text" formControlName="villeSelectionnee" autocomplete="off" placeholder="Rechercher une ville"/>
-        <button type="submit" style="background: none; border: none; padding: 0;">
-          <img 
-            src="logo_rechercher.png" 
-            alt="Logo Rechercher" 
-            style="cursor: pointer; width:24px;"> 
-        </button>
-        @if(_getVilleSelectionnee.invalid && isSubmited()){
-          <small>Veuillez saisir une ville avant de lancer la recherche</small>
-        } @else {
-          @if (villes | async; as propositions) {
-            @if (propositions.length > 0) {
-              <div class="liste-suggestions">
-                @for (proposition of propositions; track proposition.place_id) {
-                  <div class="suggestion" (click)="selectionnerVille(proposition)">
-                    {{ libellePropositionsVilles(proposition) }}
-                  </div>
-                }
-              </div>
-            }
+<form [formGroup]="form" (ngSubmit)="chercherVilles()">
+  <label for="recherche-villes">Rechercher une ville : </label>
+  <br>
+  <div class="champ-recherche">
+      <input id="recherche-villes" type="text" formControlName="villeSelectionnee" autocomplete="off" placeholder="Rechercher une ville"/>
+      <button type="submit" style="background: none; border: none; padding: 0;">
+        <img 
+          src="logo_rechercher.png" 
+          alt="Logo Rechercher" 
+          style="cursor: pointer; width:24px;"> 
+      </button>
+      @if(_getVilleSelectionnee.invalid && isSubmited()){
+        <small>Veuillez saisir une ville avant de lancer la recherche</small>
+      } @else {
+        @if (propositionsVilles().length > 0) {
+        <div class="liste-suggestions">
+          @for (proposition of propositionsVilles(); track proposition.place_id){
+            <div class="suggestion" (click)="selectionnerVille(proposition)">
+              {{libellePropositionsVilles(proposition)}}
+            </div>
           }
+        </div>
         }
-        
-    </div>
-  </form>
-</div>
+      }
+      
+  </div>
+ </form>
 
 

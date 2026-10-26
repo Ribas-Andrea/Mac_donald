@@ -1,46 +1,27 @@
 
 
-  <!-- <app-carte 
+  <app-carte 
     [ville]="villeRecue" 
     [latitude]="latitude" 
     [longitude]="longitude"
     [restaurants]="restaurants" 
-    (restaurantSelectionne)="restaurantSelectionne = $event" > 
-  </app-carte> -->
-
-  <app-carte 
-    [ville]="(villeRecue$ | async) ?? ''"
-    [latitude]="latitude" 
-    [longitude]="longitude"
-    [restaurants]="restaurants" 
-    (restaurantSelectionne)="restaurantSelectionne = $event" > 
+    (restaurantSelectionne)="restaurantSelectionne = $event" >
   </app-carte>
 
-<!-- va supprimer ligne 4,7 et 8 : suppression de l'input/output --> 
+
 
   <app-rechercheVilles id="overlayVilles"
-    (villeRecherchee)=" 
+    (villeRecherchee)="villeRecue = $event.ville; 
     latitude = $event.latitude; 
     longitude = $event.longitude">
   </app-rechercheVilles>
 
-  <!-- va supprimer ligne 14 --> 
-
-
-  <!-- <app-rechercheRestaurants id="overlayRestaurants"
+  <app-rechercheRestaurants id="overlayRestaurants"
     [ville]="villeRecue" 
     [latitude]="latitude" 
     [longitude]="longitude" 
     [restaurantSelectionneRecu]="restaurantSelectionne" 
-    (restaurantsTrouves)="restaurants = $event"> 
-  </app-rechercheRestaurants> -->
-
-
-    <app-rechercheRestaurants id="overlayRestaurants"
-    [ville]="(villeRecue$ | async) ?? ''"
-    [latitude]="latitude" 
-    [longitude]="longitude" 
-    [restaurantSelectionneRecu]="restaurantSelectionne" 
-    (restaurantsTrouves)="restaurants = $event"> <!-- va changer --> 
+    (restaurantsTrouves)="restaurants = $event">
   </app-rechercheRestaurants>
+
 

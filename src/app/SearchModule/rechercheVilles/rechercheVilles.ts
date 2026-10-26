@@ -1,15 +1,27 @@
-import { AsyncPipe } from '@angular/common';
 import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
-import { Store } from '@ngrx/store';
 import { debounceTime, of, switchMap } from 'rxjs';
-import { ResultatNominatim } from '../../models/resultat-nominatim';
-import { chargerVilles, selectionnerVille } from '../../NgRx Store/recherche.action';
-import { afficheVilles } from '../../NgRx Store/recherche.selectors';
 import { Nominatim } from '../../services/nominatim';
 
 
+interface ResultatNominatim {
+  place_id: number;
+  lat: string;
+  lon: string;
+  display_name: string;
+  name?: string;
+  address: {
+    city?: string;
+    town?: string;
+    village?: string;
+    municipality?: string;
+    postcode?: string;
+    country?: string;
+  }
+};
+
 interface RechercheVille {
+  ville: string;
   latitude: number;
   longitude: number;
 }
@@ -20,7 +32,7 @@ function nonVide(control: AbstractControl): ValidationErrors | null {
 }
 
 @Component({
-  imports: [ReactiveFormsModule, AsyncPipe ],
+  imports: [ReactiveFormsModule ],
   selector: 'app-rechercheVilles',
   styleUrl: './rechercheVilles.css',
   templateUrl: './rechercheVilles.html',
@@ -42,7 +54,7 @@ export class RechercheVilles {
   };
 
   // Liste des propositions de villes :
-  // propositionsVilles = signal<ResultatNominatim[]>([]);
+  propositionsVilles = signal<ResultatNominatim[]>([]);
 
   // Coordonnées de localisation à Saintes si localisation refusée : 
   latitude = signal(45.750000);
@@ -53,11 +65,6 @@ export class RechercheVilles {
 
   // Service Nominatim : 
   private nominatim = inject(Nominatim);
-
-  // Service NgRx Store : 
-  private store = inject(Store);
-
-  villes = this.store.select(afficheVilles);
 
   // Envoie de la ville recherchée au composant parent : 
   @Output() villeRecherchee = new EventEmitter<RechercheVille>();
@@ -71,6 +78,7 @@ export class RechercheVilles {
     });
 
     // Autocompletion des villes : 
+    // console.log(this._getVilleSelectionnee);
     this._getVilleSelectionnee.valueChanges
     .pipe(
       debounceTime(300),
@@ -78,22 +86,14 @@ export class RechercheVilles {
       valeur.length <2? of <ResultatNominatim[]>([]): this.nominatim.rechercherVille(valeur)
       )
     )
-    // .subscribe((resultat) => {
-    //   this.villes.subscribe((villes)=>{
-    //     console.log('Villes récupérées depuis NgRx :',villes);
-    //   })
-    // });
     .subscribe((resultat) => {
-      this.store.dispatch(
-        chargerVilles({ villes: resultat })
-      );
+      this.propositionsVilles.set(resultat);
+      // console.log(this.propositionsVilles());
     });
   }
 
   // Recherche la ville lorsque le formulaire est envoyé : 
   chercherVilles() {
-
-
     this.isSubmited.set(true);
     // Vérifie que le champ est valide : 
     if (this._getVilleSelectionnee.invalid){
@@ -103,96 +103,78 @@ export class RechercheVilles {
 
     // Mise en place de la recherche de la ville avec nominatim : 
     this.nominatim
-    .rechercherVille(this._getVilleSelectionnee.value)
-    .subscribe(
+    .rechercherVille(this._getVilleSelectionnee.value).subscribe(
       (resultat: ResultatNominatim[]) => {
 
       // On vérifie qu'un résultat existe : 
+        // console.log(resultat);
           if (resultat.length === 0) {
             return;
           }
 
       // Récupération des coordonnées : 
         // console.log(resultat[0]);
-        this.latitude.set(Number(resultat[0].lat)); // on ne vas pas changer
-        this.longitude.set(Number(resultat[0].lon)); // on ne vas pas changer
+        this.latitude.set(Number(resultat[0].lat));
+        this.longitude.set(Number(resultat[0].lon));
+
+      // On vide les propositions : 
+        this.propositionsVilles.set([]);
+
+      // // On transmet la ville et ses coordonnées au composant parent
+          this.villeRecherchee.emit({
+            ville: this._getVilleSelectionnee.value,
+            latitude: this.latitude(),
+            longitude: this.longitude()
+          });
 
 
-      // On transmet la ville et ses coordonnées au composant parent
-        // this.villeRecherchee.emit({ // va changer
-        //   ville: this._getVilleSelectionnee.value,
-        //   latitude: this.latitude(),
-        //   longitude: this.longitude()
-        // });
 
-        this.villeRecherchee.emit({
-          latitude: this.latitude(),
-          longitude: this.longitude()
-        });
+        // a voir si on garde : 
 
+      // On efface le restaurant précédemment sélectionné
+      // this.restaurantSelectionne.set(null);
 
-        this.store.dispatch(
-          chargerVilles({villes: resultat})
-        )
+        // Les nouvelles coordonnées sont en place, on cherche les restaurants
+        // this.chercherRestaurants();
 
-        this.store.dispatch(
-          selectionnerVille({
-            villeSelectionne: this._getVilleSelectionnee.value
-          })
-        )
+        // console.log(this.latitude());
+        // console.log(this.longitude());
 
-      })
+      }
+    );
+ };
+// Affichage des propositions de villes : 
+  autocompletionVille() {
+
+  if (this._getVilleSelectionnee.value.length < 2) {
+    this.propositionsVilles.set([]);
+    return;
   }
 
-// Affichage des propositions de villes : 
-  // autocompletionVille() {
-
-  // // if (this._getVilleSelectionnee.value.length < 2) {
-  // //   this.propositionsVilles.set([]);
-  // //   return;
-  // // }
-
-  // // On vide les propositions : 
-  // if (this._getVilleSelectionnee.value.length < 2) {
-  //   this.store.dispatch(chargerVilles({ villes: [] }));
-  //   return;
-  // }
-
-  // this.nominatim
-  //   .rechercherVille(this._getVilleSelectionnee.value)
-  //   .subscribe((resultat: ResultatNominatim[]) => {
-  //       // this.propositionsVilles.set(resultat);
-  //       this.store.dispatch(chargerVilles({ villes: resultat }));
-  //     }
-  //   );
-  // };
+  this.nominatim
+    .rechercherVille(this._getVilleSelectionnee.value)
+    .subscribe((resultat: ResultatNominatim[]) => {
+        this.propositionsVilles.set(resultat);
+      }
+    );
+  };
 
   // Selectionne une ville dans les propositions : 
   selectionnerVille(ville: ResultatNominatim) {
-
     // console.log("test");
-    // this._getVilleSelectionnee.setValue(ville.display_name, { emitEvent: false });
-
-    // this.propositionsVilles.set([]);
-
     this._getVilleSelectionnee.setValue(ville.display_name, { emitEvent: false });
 
-    this.store.dispatch(
-      selectionnerVille({
-        villeSelectionne: ville.display_name
-      })
-    );
-
-    this.store.dispatch(
-      chargerVilles({ villes: [] })
-    );
+    this.propositionsVilles.set([]);
  
  
   }
 
 // Construit le texte affiché dans les propositions : 
     libellePropositionsVilles(ville: ResultatNominatim): string {
+    // console.log(ville);
     const adresse = ville.address;
+
+    
     const nom = ville.name || '';
     const codePostale = adresse.postcode ? ', ' + adresse.postcode: '';
     const pays = adresse.country ? ', ' + adresse.country: '';

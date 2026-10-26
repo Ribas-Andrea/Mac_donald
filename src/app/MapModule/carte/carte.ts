@@ -13,7 +13,7 @@ import { latLng, Map, marker, tileLayer } from 'leaflet';
 })
 export class Carte {
 
-  @Input() ville = ''; // ville = ville du store
+  @Input() ville = '';
   @Output() restaurantSelectionne = new EventEmitter<string>();
   private map?: Map;
 
