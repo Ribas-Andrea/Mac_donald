@@ -83,11 +83,4 @@ export class RechercheRestaurants implements OnChanges{
     });
   }
 
-// Selectionne le restaurant : 
-  selectionnerRestaurant(restaurant: any) {
-    // console.log('1 - $event reçu :', restaurant);
-    this.restaurantSelectionne.set(restaurant);
-    // console.log('Restaurant sélectionné :', restaurant);
-    // console.log('2 - signal :', this.restaurantSelectionne());
-  }
 }
